@@ -1,0 +1,360 @@
+//                 #17 
+
+// Работа с JSON, AJAX, Получение и отправка данных на сервер
+
+// AJAX позволяет менять содержимое страницы без ее перезагрузки.
+// JSON - javascript object notation, текстовый формат данных, набок ключей и значений.
+// JSON используется для отправки данных на сервер.
+
+// Пример использование JSON с объектом:
+
+const smartphone = {
+  brand: 'samsung',
+  screen: 5.5,
+  rom: 128,
+  ram: 4,
+  gps: true,
+  sensor: ['Accelerometer', 'E-compass', 'Fingerprint Sensor', 'Gyroscope'],
+  camera: {
+    back: [32, 5, 8],
+    front: 16
+  }
+};
+
+// В JS есть объект для работы с JSON, называется JSON. У него есть два метода: parse() и stringify().
+
+// Выведем в консоле объект JSON:
+console.log(JSON);
+
+// Метод stringify() переводит объект в формат JSON:
+const jsonSmart = JSON.stringify(smartphone);
+
+console.log(jsonSmart);
+// В файле JSON не может содержаться одинарных кавычек, все ключи и их значения записываются в двойных кавычках(автоматически преобразовует одинарные кавычки в двойные). На выходе метода JSON.stringify(smartphone) мы получим:
+// {"brand":"samsung","screen":5.5,"rom":128,"ram":4,"gps":true,"sensors":["Accelerometer","E-compass","Fingerprint Sensor","Gyroscope"],"camera":{"back":[32,5,8],"front":16}} Все одной строкой.
+
+// Метод parse() переводит переменную формата JSON в объект:
+
+Console.log(JSON.parse(jsonSmart));
+
+// Работа с JSON и AJAX
+
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
+  const select = document.getElementById('cars'),
+        output = document.getElementById('output');
+  
+  const request = new XMLHttpRequest(); /* Создаем экземпляр XML запроса */
+
+  // У объекта XMLHttpRequest есть метод open() который используется для инициализации запроса, его синтаксис: open('метод получение/отправки данных', 'путь к сервере/файлу', true/false(asinc - установить многопоточную обработку или ждать отклика от сервера, по умолчанию -  true), login, password) последние три параметра не обязательные.
+
+  request.open('GET', './cars.json');
+
+  // Метод setRequestHeader() - устанавливает заголовок запроса
+
+  request.setRequestHeader('Content-type', 'application/json');
+
+  // Метод send() открывает соедининение и отправляет запрос:
+
+  request.send();
+
+  // События XMLHttpRequest: loadstart, progress, abort, timeout, load, error, loadend, readystatechange
+
+  /* Необходимо запускать до передачи заголовка и тела запроса
+
+    request.addEventListenet('loadstart', (event) => {
+      console.log(event);
+    })
+
+  */
+  // progress срабатывает во время получения данных от сервера
+  // abort срабатывает про использование метода abort() во время выполнения запроса
+  // load срабатывает при успешном завершении запроса
+  // error срабатывает когда запрос завершился ошибкой
+  // loadend срабатывает при завершении засобития через load, error или abort.(не кроссбраузерный)
+  // readystatechange срабатывает несколько раз за запрос, имеет 5 состояний:
+  /* 0 - при создании запроса до вызова open(),
+     1 - при вызове open(),
+     2 - при вызове sent() и полученны заголовки,
+     3 - при загрузке тела и свойство responseText может созадержать часть данных
+     4 - при завершении передачи данных от сервера. */
+  request.addEventListener('readystatechange', (event) => {
+    if (request.readyState === 4 && request.status === 200){
+      // request.status содержит числовое значение код состояния http ответа сервера, пока статус не равен 200 нам ничего делать не нужно.
+      // request.statusText - текстовоя содержание состояния сервера.
+      const data = JSON.parse(request.responseText);
+      data.cars.forEach( item => { /* перебормассива данных */ 
+        if(item.brand === select.value){
+          const {brand, model, price} = item; /* деструктуризация */
+          output.innerHTML = `Тачка ${brand} ${model} <br>
+          Цена: ${price}$`
+        }
+      });
+      // request.response - тело ответа от сервера(передаваемые данные) 
+      // request.responseText - текст передаваемый запросом от сервера
+    } else {
+      output.innerHTML = 'Произошла ошибка';
+    }
+  });
+});
+
+// Важно!!!
+// У инпута обязательно должен быть атрибут name, если его не будет - то при отправке у данных не будет ключа и отправка не сработает!
+
+// Как отправлять данные ввиде formData или же ввиде json зависит от того какой тип данных понимает сервер. Тип передаваемых данных указывается в шапке запроса.
+
+
+
+//               #18
+//Контекст выполнения, асинхронное выполнение, стек вызовов и event loop
+
+// Ключевое слово dubugger; - это метка на которой приостановится выполнение кода
+// Программа приостановится только если открыта консоль.
+// В Call Stack функция попадае в момент её вызова и убирается при завершении выполнения.
+// Функции добавляются в Call Stack сверху вниз и убираются тоже сверху вниз.
+// На пример если одна функция вызывает другую то в стек сначала добавится первая функция, потом вызванная ею функция, после того как вторая функция отработает она будет удаленна из стека и продолжится выполнения первой функции, после того как первая функция завершится - она тоже будет удалена из стека.
+// Если при выполнении функции вызванной другой функцией возникнет ошибка - в консоль будет выведен весь Call Stack.
+// Call Stack можно переполнить если вызвать функцию 16000 раз.
+// Это можно сделать через самовызывающуюся функцию.
+// Если Call Stack будет переполнен в консоли будет выведено сообщение о переполнении и последний стек вызова.
+
+// При работе с setTimeout расчет времени производится не в js, а в web api.
+
+//          Promise
+
+// Промисы - callback function 
+const promise = new Promise();
+// Можно не используя переменную создать promise, в таком случае return после промиса писать не нужно.
+// return new Promis(() => {});
+// Функция new Promise() в качестве параметра принимает executive function(функция-исполнитель) которая будет выполнять определенные действия:
+const doUniversity = (docs) => {
+  return new Promise((resolve, reject) => {
+    if (docs) {
+      console.log('Рассмотрение документов...');
+      setTimeout(() => {
+        if (Math.random() > 0.3) {
+          let result = 'Принят';
+          resolve(result); // выполнится первая функция .then((1), (2)), если будет указанно несколько resolve подряд, то выполнится только первый.
+        } else {
+          reject('Отказано');// выполнится вторая функция .then((1), (2)), если будет указанно несколько reject подряд, то выполнится только первый.
+        }
+      }, 3000);
+    } else {
+      reject('Отказано, не хватает документов');
+    }
+  });
+};
+const doArmy = (docs) => {
+  return new Promise((resolve, reject) => {
+    if (docs) {
+      console.log('Военкомат думает...');
+      setTimeout(() => {
+        if (docs === 'Принят') {
+          resolve('Отсрочка');
+          console.log('Отсрочка');
+        } else {
+          reject('Повестка');
+        }
+      }, 2000);
+    } else {
+      reject ('Повестка');
+    }
+  });
+};
+const doWork = (docs) => {
+  return new Promice((resolve, reject) => {
+    console.log('Директор Google думает...');
+    setTimeout(() => {
+      if (Math.random() > 0.3) {
+        let result = 'Приглашаем на собеседование в Google в понедельник';
+        resolve(result);
+      } else {
+        reject('Отказано иди в Яндекс!');
+      }
+    }, 3000);
+  });
+};
+
+const dance = (docs) => {
+  console.log('Потанцевали');
+  return docs;
+  // return Promise.resolve(docs); - Принудительно возвращает положительный результат
+  // return Promise.reject(docs); - Принудительно возвращает отрицательный результат
+};
+
+// У промисов есть метод .then() который обрабатывает последствия обещания.
+const documents = ['Паспорт', 'Аттестат'];
+doUniversity(documents)
+.then((result) => {
+  console.log(result);
+  return result; // передаст результат в следующий .then()
+})
+.then(doArmy)
+.then(dance)
+.then(doWork)
+.catch((reason) => {console.error(reason)})
+.finnaly(() => console.warn('Выполнится в любом случае'));
+
+// метод .catch() обрабатывает все возвражения в случае если любая из функций doUniversity, doArmy, doWork вернет отрицательный promise.
+// пока promis ожидает окончание setTimeout он находится в режиме ожидания(panding), если promis выполнен успешно он перейдет в состояние full filled. Если промис завершится ошибкой(не удачей) он перейдет в состояние reject.
+// Последний .then стоящий после .catch выполнится в любом случае(УстарелБ теперь используют .finally)
+
+// Promise.all([]) - метод который будет дожитаться выполонения всех промисов указанных в качестве параметров. В качестве параметров указывается массив промисов.
+
+const doWorking = (company) => {
+  return new Promise ((resolve, reject) => {
+    const time = Math.ceil(Math.random() * 3000);
+    setTimeout(() => {
+      if (item % 5) {
+        resolve(company);
+      } else {
+        reject(company);
+      }
+    }, time);
+  });
+};
+
+const hh = doWorking('HH'),
+      yandex = doWorking('Yandex'),
+      ozone = doWorking('Ozone'),
+      pikabu = doWorking('Pikabu'),
+      politics = doWorking('Гос Дума');
+
+Promise.all([hh, yandex, ozone, pikabu, politics])
+.then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
+.catch(result => console.error(`Компания ${result} отказала`));
+
+// Promise.race - метод который допустит к .then первый отработавший промис
+Promise.race([hh, yandex, ozone, pikabu, politics])
+.then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
+.catch(result => console.error(`Компания ${result} отказала`));
+
+
+
+//          19
+// Fetch
+// Fetch - api для получения данных с сервера.
+// Функция fetch является методом объекта window. В качестве первого параметра принимает url-адресс, в качестве второго параметра получает объект с настройками. Функция fetch возвращает промисы которые нужно обрабатывать при помощи .then и .catch. 
+// thorw - исключение при работе с .then, Прерывает выполнение .then и отправляет в .catch.
+// new Error - конструктор ошибок.
+// body у fetch - тело ответа от сервера. Передается ввиде ReadebalStream. 
+// Обработка получаеммых через fetch данных: json, block, text.
+// Настройки fetch
+// 1) Метод передачи данных, по умолчанию GET: method: 'GET
+// 2) Mode - режимы правил ограничения доменов, по умолчанию same-origin, cors - для получения данных со стороннего сервера.
+// 3) cache - режим кеширования, по умолчанию default
+// 4) credentials - указывает можно ли передавать учетные данные вместе с запросом
+// 4) headers - объект с заголовками
+// 5) redirect - поведение при редиректе: follow -  автоматическая переадресация, mellow - ручная переадресация, error -  ошибка пре переадресации.
+// 6) referrer - позволяет указать откуда пришел запрос
+// 7) body - тело запроса: JSON.stringify();
+
+// Настройка webpack и babel для работы с js
+// установака webpack dev server
+// npm install --save-dev webpack-dev-server
+// Настройка package.json:
+// "scripts": {
+//   "dev": "webpack-dev-server --open --mode=development",
+//   "build": "webpack mode=production"
+// }
+// Для настройки webpack нужно в корневой папке проекта создать файл webpack.config.js
+// Нужно установить npm i path -D
+// Настройка webpack.config.js :
+// const path = require('path');
+// module.exports = {
+//   entry: {
+//     main: './src/index.js'
+//   }, // Точка входа, можно указать объект с точками входа
+//   output: { // Точка выхода
+//     path: path.resolve(__dirname, './dist'),
+//     filename: '[name].js',// если точка входа одна можно указать bundle.js, если несколько точек входа желательно указывать [name].js
+//     publickPath: '/dist'
+//   }
+// };
+// npm run dev - запустить проект в режиме разработки
+// В режиме разработки папка dist не будет создана
+// Установка balel: npm install -D babel-loader @babel/core @babel/preset-env
+// Настройки babel:
+// Создать файл .babelrc :
+// {
+//   "presets": ["@babel/preset-env"]
+// }
+
+// Установка полифила forEach
+// npm i nodelist-foreach-polyfill
+// После его нужно импортировать в index.js
+// import 'nodelist-foreach-polyfill';
+
+// Устновка babel-polyfill
+// npm install --save @babel/polyfill
+// import '@babel/polyfill';
+
+// Установка closest-polyfill
+// npm i element-closest
+// import elementClosest from 'element-closest'; Импорт полифила
+// elementClosest(window);  Вызов
+
+// Установка полифила formData
+// npm i formdata-polyfill
+// import 'formdata-polyfill';
+
+// Установка Promise polyfill
+// npm i es6-promise
+// import 'es6-promise';
+
+// Установка Fetch polyfill
+// npm i fetch-polyfill
+// import 'fetch-polyfill';
+
+// npm run build - сборка проекта на продакшн
+
+
+
+//              #23
+//          try, catch
+// конструкция try catch позволяет перехватывать ошибки
+// Код заключенный в try выполняется по умолчанию, а код заключенный в catch будет выполняется только в том случае, если при выполнении кода заключенного в try возникла ошибка.
+try {
+  console.log('hello');
+} catch(error) {
+  console.log(error);
+}
+// При использовании конструкции try catch даже в случае возникновения ошибки код продолжит работать.
+// В конструкцию try catch можно добавить блок finally который будет выполняться в любом случае.
+try {
+  console.log('try');
+} catch(error) {
+  console.log(error);
+  console.log(error.name);
+  console.log(error.message);
+  console.log(error.stack); /* выводится по умолчанию */
+} finally {
+  // Блок finally используется очень редко.
+}
+
+//          async await
+// Объявление function decloration при работе с async
+async function funcFirst() {
+  return 'hello';
+};
+// Объявления function expression при работе с async
+const fucnTwo = async function() {
+  return 'hello';
+};
+// Объявления arrow function при работе с async
+const funcThree = async () => {
+  return 'hello';
+};
+// jshint не поддерживает async
+// async функции всегда возвращают Promise которые можно обработать при помощи then
+const funcThree = async () => {
+  return 'hello';
+};
+funcThree().then(res => console.log(res)/* Выведет в консоль возврощаемые промисом данные */).catch(error => console.warn(error)/* Отработает если async функция вернет ошибку */);
+
+// await сказывается на выражения, если await функция является промисом - то async функция будет преостановленна до тех пор пока промис не выполнится, если выражение не является промисом - то оно будет конвертироваться в промис.
+
+
+
+
