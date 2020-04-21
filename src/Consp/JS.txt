@@ -4,27 +4,48 @@
 
 // Примитивные типы данных
 let num = 10, // число, к числам также относятся Infinity и NaN
-    string = 'Hello world', // строка
-    bool = true, // логический, булеевый
-    n = null, // null - специальный тип
-    u = undefined, // не заданное значение
-    s = Symbol(); // символ
+  string = 'Hello world', // строка
+  bool = true, // логический, булеевый
+  n = null, // null - специальный тип
+  u = undefined, // не заданное значение
+  s = Symbol(); // символ
 
 // Объект и объектные типы данных
 let obj = {}, // Объект
-    arr = [], // Массив
-    regExp = /w+/g, // Регулярное выражение
-    func = function(){}; // функция
-    error = Error('error message'), // ошибки
-    data = new Date(); // Дата
+  arr = [], // Массив
+  regExp = /w+/g, // Регулярное выражение
+  func = function () {}; // функция
+error = Error('error message'), // ошибки
+  data = new Date(); // Дата
 
 // Всего в javascript 7 типов данных.
 
-console.log( typeof (n) ); // Вывести в консоль тип данных переменной n.
+console.log(typeof (n)); // Вывести в консоль тип данных переменной n.
 
 //  || - логическое "или"
 //№  ! - логическое "не"
 //  && - логическое "и"
+
+
+//  Логическое " И "
+let a = x && y; // Присвоит переменной a значение x если значение x может быть конвертировано в false, в противном случае a будет присвоино значение y. Таким образом при использовании булеевых значений логическое && возвращает true только когда оба операнда равны true, в противном случае возвращает false.
+let a1 = true && true, // true && true вернет true
+  a2 = true && false, // true && false вернет false
+  a3 = false && true, // false && true вернет false
+  a4 = false && (3 == 4), // false && false вернет false
+  a5 = 'cat' && 'dog', // true && true вернет dog
+  a6 = false && 'cat', // false && true вернет false
+  a7 = 'cat' && false; // true && false вернет false
+
+// Логическое " ИЛИ "
+let a = x || y; // Присвоит переменной a значение x если оно может быть конвертировано в true, в противном случае a будет присвоино значение y. Таким образом при использовании булеевых значений логическое || если любой из операндов равен true, если оба операнда равны false - присвоит false.
+let o1 = true || true, // true || true вернет true
+  o2 = true || false, // true || false вернет true
+  o3 = false || true, // false || true вернет true
+  o4 = false || (3 == 4), // false || false вернет false
+  o5 = 'cat' || 'dog', // true || true вернет cat
+  o6 = false || 'cat', // false || true вернет cat
+  o7 = 'cat' || false; // cat || false вернет cat
 
 // Орифметические операции
 
@@ -66,15 +87,96 @@ str.replace('world', 'friends'); // Заменит слово world на friends
 str.split(' '); // Нарезка строки на массив, в кавычках указывается раздеритель который будет указывать на отдельные элементы массива, в данном случае пробел
 // Все эти методы работы со строками не изменяют исходную строку, а возвращают новую строку
 
-// Тернарный оператор
-x ? y : z ; //  Если x = true - выполнится y, если x = false - выполнится z;
-x === 5 ? console.log('x = 5') : console.log('x != 5');
-// Несколько тернарных операторов
-x === 5 ? console.log('x = 5') : x === 7 ? console.log('x = 7') : console.log('x != 5 && x != 7') 
-
 
 
 //                #3
+
+// Взаимодействие с пользователем, динамическая типизация и ветвление в JavaScript
+
+let question = confirm('Ты человек?'); // Выводит модальное окно с сообщение и кнопками "Ок" и "Отмена", возвращает true или false в зависимоти от того какая кнопка была нажата.
+let question2 = prompt('Как тебя зовут?', 'Илья'); // Выводит модальное окно с сообщением, значение поумолчанию, текстовым полем и кнопками "ок" и "отмена". Возвращает строку с текством от пользователя или null в случае если нажали кнопку "отмена".
+
+// Преобразование типов
+
+// number + string = string
+// number - string = number
+// numer * string = number
+// number / string = number
+// Если строка в результате вычитания, умножения, деления не может быть вычислена вернет NaN:
+// 'JS' / '5' = NAN
+
+// Преобразование в булеевый тип
+console.log(Boolean(5)); // true
+// или
+console.log(!5); // false
+console.log(!!5); // true
+
+// Преобразования которые возвращают false:
+Boolean(''); // false
+Boolean(0); // false
+Boolean(-0); // false
+Boolean(NaN); // false
+Boolean(null); // false
+Boolean(undefined); // false
+Boolean(false); // false
+
+// Любые значения, не входящие в этот список преобразуются в true, включая объекты, функции, массивы, даты, а также типа, определенные пользователем. Значения типа Symbol также преобразуются в true. пустые объекты и пустые массивы тоже преобразуются в true.
+
+Boolean({}); // true
+Boolean([]); // true
+Boolean(Symbol()); // true
+!!Symbol(); // true
+Boolean(function () {}); // true
+
+// Преобразования к типу String
+String([1, 2, 3]); // Строка '[1,2,3]'
+let x = 10 + ''; //  Строка '10'
+// метод .toString() работает только с числами и булиновыми значениями
+x = 10.toString(); // Строка '10'
+// Преобразование символов в строку возможно только через функцию String
+String(Symbol('my symbol')); //  строка 'Symbol('my symbol')'
+
+// Преобразование в число
+// Через функцию Number
+x = Number('10'); //  Число 10
+// Через унарный оператор ' + '
+x = +'10'; // Число 10
+// Использование унарного оператора в prompt
+let question = +prompt('Сколько тебе лет?'); // Значение будет преобразовываться в числовой тип, если пользователь введет не число - то значение будет NaN.
+console.log(parseInt('10', 10)); // Преобразует строку в число без плавающей запятой символ за символом пока не дойдет до конца строки или до символа не являющегося числом, вторым параметром принимает систему счисления. Если перед числовым символом будет любой другой символ - функция вернет NaN.
+console.log(parseFloat('10')); // Преабразует строку в число с плавающей запятой.
+
+
+
+// Ветвление в javaScript
+
+if (true) {
+  console.log('true');
+} else {
+  console.log('false');
+}
+
+switch (n) {
+  case 1: // case проверяет на строгое соответвие и если n = '1' - условие не сработает!
+    console.log('1');
+    break;
+  case 2:
+    console.log('2');
+    break;
+  case 3:
+  case 4:
+  case 5:
+    console.log('группировка кейсов 3,4,5 когда для разных вариантов используется одна обработка');
+    break;
+  default:
+    console.log('default');
+}
+
+// Тернарный оператор
+x ? y : z; //  Если x = true - выполнится y, если x = false - выполнится z;
+x === 5 ? console.log('x = 5') : console.log('x != 5');
+// Несколько тернарных операторов
+x === 5 ? console.log('x = 5') : x === 7 ? console.log('x = 7') : console.log('x != 5 && x != 7')
 
 
 
@@ -147,8 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   const select = document.getElementById('cars'),
-        output = document.getElementById('output');
-  
+    output = document.getElementById('output');
+
   const request = new XMLHttpRequest(); /* Создаем экземпляр XML запроса */
 
   // У объекта XMLHttpRequest есть метод open() который используется для инициализации запроса, его синтаксис: open('метод получение/отправки данных', 'путь к сервере/файлу', true/false(asinc - установить многопоточную обработку или ждать отклика от сервера, по умолчанию -  true), login, password) последние три параметра не обязательные.
@@ -184,13 +286,18 @@ document.addEventListener('DOMContentLoaded', () => {
      3 - при загрузке тела и свойство responseText может созадержать часть данных
      4 - при завершении передачи данных от сервера. */
   request.addEventListener('readystatechange', (event) => {
-    if (request.readyState === 4 && request.status === 200){
+    if (request.readyState === 4 && request.status === 200) {
       // request.status содержит числовое значение код состояния http ответа сервера, пока статус не равен 200 нам ничего делать не нужно.
       // request.statusText - текстовоя содержание состояния сервера.
       const data = JSON.parse(request.responseText);
-      data.cars.forEach( item => { /* перебормассива данных */ 
-        if(item.brand === select.value){
-          const {brand, model, price} = item; /* деструктуризация */
+      data.cars.forEach(item => {
+        /* перебормассива данных */
+        if (item.brand === select.value) {
+          const {
+            brand,
+            model,
+            price
+          } = item; /* деструктуризация */
           output.innerHTML = `Тачка ${brand} ${model} <br>
           Цена: ${price}$`
         }
@@ -241,7 +348,7 @@ const doUniversity = (docs) => {
           let result = 'Принят';
           resolve(result); // выполнится первая функция .then((1), (2)), если будет указанно несколько resolve подряд, то выполнится только первый.
         } else {
-          reject('Отказано');// выполнится вторая функция .then((1), (2)), если будет указанно несколько reject подряд, то выполнится только первый.
+          reject('Отказано'); // выполнится вторая функция .then((1), (2)), если будет указанно несколько reject подряд, то выполнится только первый.
         }
       }, 3000);
     } else {
@@ -262,7 +369,7 @@ const doArmy = (docs) => {
         }
       }, 2000);
     } else {
-      reject ('Повестка');
+      reject('Повестка');
     }
   });
 };
@@ -290,15 +397,17 @@ const dance = (docs) => {
 // У промисов есть метод .then() который обрабатывает последствия обещания.
 const documents = ['Паспорт', 'Аттестат'];
 doUniversity(documents)
-.then((result) => {
-  console.log(result);
-  return result; // передаст результат в следующий .then()
-})
-.then(doArmy)
-.then(dance)
-.then(doWork)
-.catch((reason) => {console.error(reason)})
-.finnaly(() => console.warn('Выполнится в любом случае'));
+  .then((result) => {
+    console.log(result);
+    return result; // передаст результат в следующий .then()
+  })
+  .then(doArmy)
+  .then(dance)
+  .then(doWork)
+  .catch((reason) => {
+    console.error(reason)
+  })
+  .finnaly(() => console.warn('Выполнится в любом случае'));
 
 // метод .catch() обрабатывает все возвражения в случае если любая из функций doUniversity, doArmy, doWork вернет отрицательный promise.
 // пока promis ожидает окончание setTimeout он находится в режиме ожидания(panding), если promis выполнен успешно он перейдет в состояние full filled. Если промис завершится ошибкой(не удачей) он перейдет в состояние reject.
@@ -307,7 +416,7 @@ doUniversity(documents)
 // Promise.all([]) - метод который будет дожитаться выполонения всех промисов указанных в качестве параметров. В качестве параметров указывается массив промисов.
 
 const doWorking = (company) => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const time = Math.ceil(Math.random() * 3000);
     setTimeout(() => {
       if (item % 5) {
@@ -320,19 +429,19 @@ const doWorking = (company) => {
 };
 
 const hh = doWorking('HH'),
-      yandex = doWorking('Yandex'),
-      ozone = doWorking('Ozone'),
-      pikabu = doWorking('Pikabu'),
-      politics = doWorking('Гос Дума');
+  yandex = doWorking('Yandex'),
+  ozone = doWorking('Ozone'),
+  pikabu = doWorking('Pikabu'),
+  politics = doWorking('Гос Дума');
 
 Promise.all([hh, yandex, ozone, pikabu, politics])
-.then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
-.catch(result => console.error(`Компания ${result} отказала`));
+  .then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
+  .catch(result => console.error(`Компания ${result} отказала`));
 
 // Promise.race - метод который допустит к .then первый отработавший промис
 Promise.race([hh, yandex, ozone, pikabu, politics])
-.then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
-.catch(result => console.error(`Компания ${result} отказала`));
+  .then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
+  .catch(result => console.error(`Компания ${result} отказала`));
 
 
 
@@ -421,14 +530,14 @@ Promise.race([hh, yandex, ozone, pikabu, politics])
 // Код заключенный в try выполняется по умолчанию, а код заключенный в catch будет выполняется только в том случае, если при выполнении кода заключенного в try возникла ошибка.
 try {
   console.log('hello');
-} catch(error) {
+} catch (error) {
   console.log(error);
 }
 // При использовании конструкции try catch даже в случае возникновения ошибки код продолжит работать.
 // В конструкцию try catch можно добавить блок finally который будет выполняться в любом случае.
 try {
   console.log('try');
-} catch(error) {
+} catch (error) {
   console.log(error);
   console.log(error.name);
   console.log(error.message);
@@ -443,7 +552,7 @@ async function funcFirst() {
   return 'hello';
 };
 // Объявления function expression при работе с async
-const fucnTwo = async function() {
+const fucnTwo = async function () {
   return 'hello';
 };
 // Объявления arrow function при работе с async
@@ -455,10 +564,6 @@ const funcThree = async () => {
 const funcThree = async () => {
   return 'hello';
 };
-funcThree().then(res => console.log(res)/* Выведет в консоль возврощаемые промисом данные */).catch(error => console.warn(error)/* Отработает если async функция вернет ошибку */);
+funcThree().then(res => console.log(res) /* Выведет в консоль возврощаемые промисом данные */ ).catch(error => console.warn(error) /* Отработает если async функция вернет ошибку */ );
 
 // await сказывается на выражения, если await функция является промисом - то async функция будет преостановленна до тех пор пока промис не выполнится, если выражение не является промисом - то оно будет конвертироваться в промис.
-
-
-
-
