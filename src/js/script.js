@@ -30,4 +30,4 @@ console.log('period: ', period + ' месяцев');
 budgetDay = Math.floor(BudgetMonth / 30);
 console.log('budgetDay: ', budgetDay);
 
-budgetDay >= 800 ? console.log('Высокий уровень дохода') : budgetDay >= 300 ? console.log('Средний уровень дохода') : budgetDay >= 0 ? console.log('Низкий уровень дохода') : console.log('Что то пощло не так');
+budgetDay >= 800 ? console.log('Высокий уровень дохода') : budgetDay >= 300 ? console.log('Средний уровень дохода') : budgetDay > 0 ? console.log('Низкий уровень дохода') : console.log('Что то пощло не так');
