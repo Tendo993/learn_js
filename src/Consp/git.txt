@@ -46,7 +46,7 @@ git log --oneline
 git log --oneline --all
       - посмотреть все коммиты во всех ветках отсортированные по дате в порядке убывания
 
-it log --oneline --all
+git log --oneline --all
       - посмотреть все коммиты во всех ветках отсортированные по дате в порядке убывания, отображаться коммиты будут в виде древа.
 
 git show хэш
@@ -76,7 +76,7 @@ git push origin master
 Создание новой ветки в репозитории и коммит в новую ветку на github
 
 git checkout -b new_branch
-git commit -a -m 'created ne branch'
+git commit -a -m 'created new branch'
 git push origin new_branch
 
 
