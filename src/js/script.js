@@ -21,6 +21,8 @@ console.log('typeof money:', typeof (money));
 console.log('typeof income:', typeof (income));
 console.log('typeof deposit:', typeof (deposit));
 
+console.log('addExpenses.split:', addExpenses.split(', '));
+
 BudgetMonth = +(money - (firstExpensesCost + secondExpensesCost + thirdExpensesCost + fourtheExpensesCost));
 console.log('BudgetMonth: ', BudgetMonth);
 
