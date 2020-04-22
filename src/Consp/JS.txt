@@ -1,6 +1,4 @@
-//                #2
-
-// Типы данных, операторы, методы и свойства
+function lesson02(theme = 'Типы данных, операторы, методы и свойства') {
 
 // Примитивные типы данных
 let num = 10, // число, к числам также относятся Infinity и NaN
@@ -105,14 +103,9 @@ str.indexOf('world'); // Вернет индекс первого символа
 str.replace('world', 'friends'); // Заменит слово world на friends
 str.split(' '); // Нарезка строки на массив, в кавычках указывается раздеритель который будет указывать на отдельные элементы массива, в данном случае пробел
 // Все эти методы работы со строками не изменяют исходную строку, а возвращают новую строку
+} // end lesson02
 
-
-//      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===
-
-
-//                #3
-
-// Взаимодействие с пользователем, динамическая типизация и ветвление в JavaScript
+function lesson03(theme = 'Взаимодействие с пользователем, динамическая типизация и ветвление в JavaScript') {
 
 let question = confirm('Ты человек?'); // Выводит модальное окно с сообщение и кнопками "Ок" и "Отмена", возвращает true или false в зависимоти от того какая кнопка была нажата.
 let question2 = prompt('Как тебя зовут?', 'Илья'); // Выводит модальное окно с сообщением, значение поумолчанию, текстовым полем и кнопками "ок" и "отмена". Возвращает строку с текством от пользователя или null в случае если нажали кнопку "отмена".
@@ -174,6 +167,13 @@ console.log(Number(true)); // 1
 console.log(Number(false)); // 0
 console.log(Number(null)); // 0
 
+// Не обычные преобразования
+console.log(null == 0); // false
+console.log(null == null); // true
+console.log(undefined == undefined); // true
+console.log(null == undefined); // true
+console.log(NaN == NaN); // false , NaN Не равен ни одному значению, даже самому себе.
+
 // Ветвление в javaScript
 
 if (true) {
@@ -204,37 +204,181 @@ x === 5 ? console.log('x = 5') : console.log('x != 5');
 // Несколько тернарных операторов
 x === 5 ? console.log('x = 5') : x === 7 ? console.log('x = 7') : console.log('x != 5 && x != 7')
 
+} // end lesson03
 
-//      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===
+function lesson04(theme = 'Все о функциях, callback-функции, область видимости и замыкания') {
+// Имя функции должно быть глаголом, описывающим ее действия(поведение)
+// Функции начинающиеся с:
+// show.. - что-то показывают
+// get.. - возвращают значение
+// calc.. - что-то вычисляют
+// create.. - что-то создают
+// check.. - что-то проверяют и возвращают логическое значение
+// Негласное правило: одна функция - одно действие
+// Любая функция что-то возвращает, будь то значение, объект или undefined
+function outputMessage() { // Объявление функции. Такое объявление называется function declaration statement. Особенность такого объявления - облость видимости, функцию можно вызвать до ее объявления.
+  console.log('Hello world');
+}
+outputMessage(); // Вызов функции
 
+// Если в теле функции return не указан - функция вернет undefined
+// Если в теле функции указан пустой return - функция вернет undefined
 
-//                #4
+function concat(name) { // name -  передаваемый параметр функции
+  console.log(arguments); // Посмотреть список переданных аргументов
+  return 'Hello ' + name; // return возвращает значение - строку 'Hello name', где name - значение передаваемого параметра
+}
 
-//  
+let res = concat('Петя'); // Присвоение переменной значения функции
+concat('Вася'); // Вася - передаваемый аргумент, если при вызове функции ей не передать параметр - поумолчанию он будет undefined. Если передать больше аргументов, чем принимает функция, ничего не произойдет, они использоваться не будут.
 
+// Параметры функции - это переменные
+// Аргументы функции - это значения переменных
 
+function showName(name , surname = 'Husiev') { // surname здесь имеет значение поумолчанию, оно будет использоваться если при вызове функции аргумент не будет указан, если аргумент указан - будет использоваться указанный при вызове аргумент
+  console.log(name + ' ' + surname);
+}
+showName('Ilia', 'tendo'); // surname будет изменен с Husiev на tendo
 
+let concat1 = function(name) { // Такой вид объявления(присвоение фукции переменной) называется function definition expression или функциональное выражение. В отличии от объявления функции(function declaration statement) не поднимается вверх и его нельзя вызвать до его объявления
+  return 'Hello ' + name;
+};
 
+// Анонимная функция - функция без имени
+function funcMath (a, b, plus, minus) { // В качестве параметров функции могут быть функции
+  let res = (a > b) ? minus(a, b) : plus(a, b);
+  console.log(res);
+}
+funcMath(5, 4,
+  function(a, b) { // Анонимная функция объявляемая при вызове функции funcMath
+    return a + b;
+  },
+  function(a, b) { // Анонимная функция объявляемая при вызове функции funcMath
+    return a - b;
+  });
 
+// callback - функция
 
+let logUser = function(userData) {
+  if (userData === 'admin') {
+    // console.log('Администратор'); В функция не желательно использовать console.log
+    return 'Администратор';
+  } else {
+    // console.log('Пользователь'); В функция не желательно использовать console.log
+    return 'Пользователь';
+  }
+};
 
+let inputUser = function(user, callback) {
+  let status = 'user';
+  if (user === 'Андрей' || user === 'Василий') {
+    status = 'admin';
+  };
+  return callback(status); // вызов callback-функции
+};
 
+// Еще один пример callback-функции
 
+function ask(question, yes, no) {
+  if (confirm(question)) yes()
+  else no();
+}
+ask(
+  'Вы согласны?', // первый аргумент вызова функции ask
+  function() { alert('Вы согласились.'); }, // Второй аргумент вызова функции ask
+  function() { alert('Вы отказались.'); } // Третий аргумент вызова функции ask
+);
 
+console.log(inputUser('максим', logUser)); // logUser -  функция передаваемая для callback вызова
 
+// Облость видимости и замыкания
 
+function funcMath1() {
+  let a = 10; // переменная a определенная в контексте функции funcMath1
+  return function() { // функция внутри функции - это замыкание, поскольку внутрянняя функция сохраняет доступ к переменным функции-родителя
+    console.log(a * a);
+  };
+};
+funcMath1(); // При таком вызове ничего выведено не будет, потому что анонимная функция вызвана не будет и функция funcMath1 вернет ссылку на анонимную функцию
+let mathPow = funcMath1(); // Присвоение ссылки на анонимную функцию переменной mathPow
+mathPow(); // Вызов анонимной функции через ссылку mathPow.
 
+// После объявления переменной внутри функции - доступ к ней возможен только внутри функции.
+// Если в функции используется переменная, но она в функции не объявлена интерпретатор поднимется на уровень выше и будет искать переменную там.
 
+function createIncrementor(n) {
+  return function(num) {
+    return n + num;
+  };
+};
+let addOne = createIncrementor(1); // Функция замкне в себе значение n = 1
+let addTen = createIncrementor(10); // Функция замкнет в себе значение n = 10
 
+console.log(addOne(5)); // Функция передаст num = 5, выведет 6;
+console.log(addTen(5)); // num = 5, выведет 15
 
+function urlGenerator(domain) {
+  return function(url) {
+    return `https://${url}.${domain}`;
+  };
+};
+const comUrl = urlGenerator('com'); // Замкнул значение domain = com;
+const ruUrl = urlGenerator('ru'); // Замкнул значение domain = ru
 
+console.log(comUrl('google')); // https://google.com
+console.log(ruUrl('yandex')); // https://yandex.ru
 
-//      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===      ===     ===     ===
+} // end lesson04
 
+function lesson05(theme = '') {
 
-//                 #17 
+} // end lesson05
 
-// Работа с JSON, AJAX, Получение и отправка данных на сервер
+function lesson06(theme = '') {
+
+} // end lesson06
+
+function lesson07(theme = '') {
+
+} // end lesson07
+
+function lesson08(theme = '') {
+
+} // end lesson08
+
+function lesson09(theme = '') {
+
+} // end lesson09
+
+function lesson10(theme = '') {
+
+} // end lesson10
+
+function lesson11(theme = '') {
+
+} // end lesson11
+
+function lesson12(theme = '') {
+
+} // end lesson12
+
+function lesson13(theme = '') {
+
+} // end lesson13
+
+function lesson14(theme = '') {
+
+} // end lesson14
+
+function lesson15(theme = '') {
+
+} // end lesson15
+
+function lesson16(theme = '') {
+
+} // end lesson16
+
+function lesson17(theme = 'Работа с JSON, AJAX, Получение и отправка данных на сервер') {
 
 // AJAX позволяет менять содержимое страницы без ее перезагрузки.
 // JSON - javascript object notation, текстовый формат данных, набок ключей и значений.
@@ -343,10 +487,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Как отправлять данные ввиде formData или же ввиде json зависит от того какой тип данных понимает сервер. Тип передаваемых данных указывается в шапке запроса.
 
+} // end lesson17
 
-
-//               #18
-//Контекст выполнения, асинхронное выполнение, стек вызовов и event loop
+function lesson18(theme = 'Контекст выполнения, асинхронное выполнение, стек вызовов и event loop') {
 
 // Ключевое слово dubugger; - это метка на которой приостановится выполнение кода
 // Программа приостановится только если открыта консоль.
@@ -471,10 +614,9 @@ Promise.race([hh, yandex, ozone, pikabu, politics])
   .then(result => console.log(`Тебя пригласили на собеседование в: ${result}`))
   .catch(result => console.error(`Компания ${result} отказала`));
 
+} // end lesson18
 
-
-//          19
-// Fetch
+function lesson19(theme = 'Fetch') {
 // Fetch - api для получения данных с сервера.
 // Функция fetch является методом объекта window. В качестве первого параметра принимает url-адресс, в качестве второго параметра получает объект с настройками. Функция fetch возвращает промисы которые нужно обрабатывать при помощи .then и .catch. 
 // thorw - исключение при работе с .then, Прерывает выполнение .then и отправляет в .catch.
@@ -550,10 +692,9 @@ Promise.race([hh, yandex, ozone, pikabu, politics])
 
 // npm run build - сборка проекта на продакшн
 
+} // end lesson19
 
-
-//              #23
-//          try, catch
+function lesson23(theme = 'try, catch') {
 // конструкция try catch позволяет перехватывать ошибки
 // Код заключенный в try выполняется по умолчанию, а код заключенный в catch будет выполняется только в том случае, если при выполнении кода заключенного в try возникла ошибка.
 try {
@@ -595,3 +736,5 @@ const funcThree = async () => {
 funcThree().then(res => console.log(res) /* Выведет в консоль возврощаемые промисом данные */ ).catch(error => console.warn(error) /* Отработает если async функция вернет ошибку */ );
 
 // await сказывается на выражения, если await функция является промисом - то async функция будет преостановленна до тех пор пока промис не выполнится, если выражение не является промисом - то оно будет конвертироваться в промис.
+
+} // end lesson23
