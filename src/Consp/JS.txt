@@ -330,7 +330,43 @@ console.log(ruUrl('yandex')); // https://yandex.ru
 
 } // end lesson04
 
-function lesson05(theme = '') {
+function lesson05(theme = 'Все о циклах') {
+  // Рекурсия - вызов функции внутри ее тела(вызов самой себя)
+  function changeTires(snowTires) {
+    snowTires--;
+    console.log(snowTires);
+    if (snowTires > 0) {
+      changeTires(snowTires); // Рекурсия
+    }
+  }
+  changeTires(4);
+
+  // Циклические операторы
+  // while
+  let n = 0;
+  while (n < 5) {
+    console.log(n);
+    n++;
+  }
+
+  // do while
+
+  do {
+    console.log(n);
+    n++;
+  } while (n < 5)
+
+  // for
+
+  for(let i = 0; i < 5; i++) {
+    if (i === 2) {
+      continue; // Прекратить текущую итерацию цикла и перейти к следующей
+    }
+    if (i === 3) {
+      break; // Выход из цикла
+    }
+    console.log(i)
+  }
 
 } // end lesson05
 
