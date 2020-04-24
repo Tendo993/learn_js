@@ -1,17 +1,18 @@
 'use strict';
 
-let money = +prompt('Ваш месячный доход?', 50000),
-  income = prompt('Ваши источники дохода?', 'Работа, Премия, Фриланс'),
+let money;
+let start = function () {
+  do {
+    money = prompt('Ваш месячный доход?', 50000);
+    money = +money;
+    console.log('money: ', money);
+  } while (isNaN(money) || money == '' || money == null);
+}
+start();
+
+let income = prompt('Ваши источники дохода?', 'Работа, Премия, Фриланс'),
   addExpenses = prompt('Перечислите возможные расходы за расчитываемый период через запятую', 'Чай, Кофе, Жвачка'),
   deposit = confirm('Есть ли у вас депозит в банке?'),
-  firstExpenses = prompt('Какие обязательные расходы у вас есть?', 'Кварплата'),
-  firstExpensesCost = +prompt('Во сколько это обойдется?', '6000'),
-  secondExpenses = prompt('Какие обязательные расходы у вас есть?', 'Продукты'),
-  secondExpensesCost = +prompt('Во сколько это обойдется?', '10000'),
-  thirdExpenses = prompt('Какие обязательные расходы у вас есть?', 'Бензин'),
-  thirdExpensesCost = +prompt('Во сколько это обойдется?', '4000'),
-  fourthExpenses = prompt('Какие обязательные расходы у вас есть?', 'Коммуналка'),
-  fourtheExpensesCost = +prompt('Во сколько это обойдется?', '1000'),
   mission = 1000000,
   period,
   budgetDay,
@@ -25,25 +26,69 @@ showTypeOf(money);
 showTypeOf(income);
 showTypeOf(deposit);
 
-let getExpensesMonth = function () {
-  return firstExpensesCost + secondExpensesCost + thirdExpensesCost + fourtheExpensesCost;
+let expenses1,
+  expenses2,
+  expenses3,
+  expenses4;
+
+let expensesMonth = function () {
+  let sum = 0;
+  for (let i = 0; i < 4; i++) {
+    if (i === 0) {
+      expenses1 = prompt('Какие обязательные расходы у вас есть?', 'Кварплата');
+      let exp;
+      do {
+        exp = prompt('Во сколько это обойдется?', '6000');
+      } while (isNaN(exp) || exp == '' || exp == null);
+      sum += +exp;
+    } else if (i === 1) {
+      expenses2 = prompt('Какие обязательные расходы у вас есть?', 'Продукты');
+      let exp;
+      do {
+        exp = prompt('Во сколько это обойдется?', '10000');
+      } while (isNaN(exp) || exp == '' || exp == null);
+      sum += +exp;
+    } else if (i === 2) {
+      expenses3 = prompt('Какие обязательные расходы у вас есть?', 'Бензин');
+      let exp;
+      do {
+        exp = prompt('Во сколько это обойдется?', '4000');
+      } while (isNaN(exp) || exp == '' || exp == null);
+      sum += +exp;
+    } else if (i === 3) {
+      expenses4 = prompt('Какие обязательные расходы у вас есть?', 'Коммуналка');
+      let exp;
+      do {
+        exp = prompt('Во сколько это обойдется?', '1000');
+      } while (isNaN(exp) || exp == '' || exp == null);
+      sum += +exp;
+    }
+  }
+  return sum;
 }
 
+let expensesAmount = expensesMonth();
+
 let getAccumulatedMonth = function () {
-  return +(money - getExpensesMonth());
+  return +(money - expensesAmount);
 };
+
 accumulatedMonth = getAccumulatedMonth();
 console.log('accumulatedMonth: ', accumulatedMonth);
 
-
-BudgetMonth = +(money - getExpensesMonth());
+BudgetMonth = +(money - expensesAmount);
 
 let getTargetMonth = function () {
   return Math.ceil(mission / BudgetMonth);
 }
 
 period = getTargetMonth();
-console.log('period: ', period + ' месяцев');
+
+if (getTargetMonth() < 0) {
+  console.log('Цель не будет достигнута');
+} else {
+  console.log('period: ', period + ' месяцев');
+}
 
 let accumulatedPeriod = function () {
   return accumulatedMonth * period;
