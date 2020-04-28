@@ -64,7 +64,7 @@ let appData = {
                     q2 = +prompt("Во сколько это обойдется?", "1000");
                 }
             } while (isNaN(q2) || q2 == "" || q2 == null);
-            appData.expenses[q1] = q2;
+            appData.expenses[q1] = +q2;
         }
         console.log('appData.expenses: ', appData.expenses);
     },

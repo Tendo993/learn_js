@@ -511,7 +511,70 @@ function lesson06(theme = 'Объекты, массивы') {
 
 } // end lesson06
 
-function lesson07(theme = '') {
+function lesson07(theme = 'API DOM, работа с страницей') {
+  // API - applicataion programming interface
+  // DOM - document object model, объектная модель документа
+  // BOM - browser object model
+
+  document.getElementById('#id'); // Получить элемент с указанным id
+
+  document.getElementsByTagName('h1'); // получить html-коллекцию элементов по тегу
+
+  document.getElementsByClassName('class_name'); // Получить html-коллекцию элементов по классу, чтобы получить конкретный элемент из коллекции нужно вторым параметром указать в квадратных скобках его порядковый номер
+  document.getElementsByClassName('class_name' [1]);
+
+  document.querySelector('h1'); // Получить элемент по селектору: #id, .class, tag-name
+
+  document.querySelectorAll('h1'); // Получить колекцию элементов по селектору
+
+  // Преймущество использования querySelector в том, что коллекция nodelist имеет метод forEach для ее перебора
+
+  let myElem = document.querySelector('.hello');
+
+  myElem.setAttribute('style', 'font-size: 24px'); // Добавить атрибут style
+
+  console.log(myElem.getAttribute('id')); // Вывести значение аттрибута id элемента .hello
+  console.log(myElem.className); // Выведет строку с всеми классами элемента
+  console.log(myElem.classList); // Вывести коллекцию с классами
+
+  myElem.classList.add('js'); // Добавить класс js
+  myElem.classList.remove('hello'); // Удалить класс hello
+
+  let collect = document.querySelectorAll('.collections'), // => ul
+    elem = document.querySelectorAll('.elem'); // => li
+
+  collect[0].removeChild(elem[3]); // Удалит 4-й li в первом ul
+
+  collect[1].appendChild(elem[3]); // Переместит элемент 4 в конец списка 1
+
+  collect[0].insertBefore(elem[4], elem[2]); // переставить 4-й элемент перет 2-м элемементом
+  collect[0].insertBefore(elem[4], null); // переставить в конец
+
+  collect[0].replaceChild(elem[4], elem[2]); // Удаляет элемент2 и заменяет его элементом4, возвращает удаленный элемент
+
+  let elemClone = elem[2].cloneNode(); // Скопировать элемент2 без его содержимого(детей - текста внутри li)
+  elemClone = elem[2].cloneNode(true); // Скопировать элемент2 с всем его содержимым(потомками)
+  collect[1].appendChild(elemClone); // добавить в список1 копию элемент2
+
+  // Создание DOM-элементов
+
+  console.log(collect[0].innerHTML); // Возвращает разметку внутри коллекции
+  console.log(collect[0].textContent); // Возвращает текст внутри элемента
+
+  let newElem = document.createElement('li'); // создали элемент li
+  newElem.textContent = 'Новый элемент';
+  collect[1].appendChild(newElem);
+
+
+
+
+
+
+
+
+
+
+
 
 } // end lesson07
 
