@@ -578,7 +578,86 @@ function lesson07(theme = 'API DOM, работа с страницей') {
 
 } // end lesson07
 
-function lesson08(theme = '') {
+function lesson08(theme = 'Обработчики событий. Особенности их работы') {
+  // addEventListener - Добавить слушатель событий
+  let square = document.querySelector('.square');
+  square.addEventListener('click', function () {
+    console.log('Функция 1');
+  });
+  square.addEventListener('click', function () {
+    console.log('Функция 2');
+  });
+  square.addEventListener('click', function () {
+    console.log('Функция 3');
+  });
+  // Чтобы обработчик событий можно было удалить нужно указывать именную функцию:
+  let count = 0;
+  let clicked = function () {
+    count++;
+    if (count === 3) {
+      square.removeEventListener('click', clicked);
+    }
+    console.log('Произошел клик по элементу');
+  };
+  square.addEventListener('click', clicked);
+
+  // У каждого события есть объект события. Этот объект доступен только фукции-обработчику события. Чтобы его получить нужно первым параметром фукции-обработчика указать его имя. Называть его можно как-угодно, но приято его называть 'event' или 'e'.
+
+  let eventFunc = function (event) {
+    console.log(event.type);
+  };
+  square.addEventListener('click', eventFunc); // Срабатывает при клике(кнопка нажата и отпущена в пределах элемента)
+  square.addEventListener('mouseup', eventFunc); // Срабатывает когда кнопка мыши была зажата на пределами элемента, а отпущена в пределах элемента
+  square.addEventListener('mousedown', eventFunc); // Срабатывает при нажатии кнопки кнопки миши на элементе, но если кнопка была отпущена за пределами элемента
+  // Обработчики отработают в следующем порядке:
+  // 1) mousedown
+  // 2) mouseup
+  // 3) click
+  square.addEventListener('mouseenter', eventFunc); // Сработает когда указатель попадет на область элемента
+  square.addEventListener('mouseleave', eventFunc); // Сработает когда указатель покинет область элемента
+  square.addEventListener('mouseover', eventFunc); // Срабатывает при наведении на элемент и на внутренний элемент(на детей)
+  square.addEventListener('mouseout', eventFunc); // Срабатывает при наведении на элемент и на внутренний элемент(на детей)
+  square.addEventListener('mousemove', eventFunc); // Срабатывает при перемещении указателя мышки над элементом.
+
+  // События возникающие при работе с формами
+  document.querySelector('#text').addEventListener('input', eventFunc); // Событие input происходит когда мы меняем состояние(value) элемента input: ввода, изменение, изменение значения.
+  document.querySelector('#text').addEventListener('change', eventFunc); // Событие change происходит когда элемент теряет фокус(уходим с инпута), событие запоминает состояние value элемента до фокуса и сравнивает его с value после фокуса, если оно отличается - сработыает обработчик события.
+  document.querySelector('#text').addEventListener('keydown', eventFunc); // Срабатывает при нажатии кнопки(будет срабатывает при зажатии кнопки)
+  document.querySelector('#text').addEventListener('keyup', eventFunc); // Срабатывает когда отпускают нажатую кнопку
+  document.querySelector('#text').addEventListener('focus', eventFunc); // Срабатывает при нажатии на элемент(когда мы его берем в фокус)
+  document.querySelector('#text').addEventListener('input', eventFunc); // Срабатывает при потере фокуса(когда мы нажимаем на какое-либо другое место)
+
+  document.querySelector('#range').addEventListener('change', eventFunc); // Срабатывает при перемещении ползунка элемента range, при его срабатывании можно получить значение value элемента и работать уже с ним.
+
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('Страниаца загрузилась')
+  }); // Сработает когда DOMдерево посностью загрузится, обычно в тело обработчика помещается весь JS код.
+
+  window.onbeforeunload = function () {
+    console.log('Вы точно хотите покинуть страницу?')
+  }; // Сработает если пользователь попробует закрыть вкладку.
+
+  // event.PreventDefault - отмена стандартного поведения элемента
+  document.querySelector('#link').addEventListener('click', function (event) {
+    event.preventDefault();
+    console.log('click');
+  });
+
+  document.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+  }); // Отключение контекстного меню(правая кнопка мыши) на сайте
+
+  // Всплытие-перехват
+  // Перехват(захват) - событие сначала срабатывает на document>html>body... и постепенно погружаясь к дочерним элементам
+  // Всплытие наоборот от дочернего к родительским
+
+
+
+
+
+
+
+
 
 } // end lesson08
 
