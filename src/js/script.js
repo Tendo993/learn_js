@@ -153,4 +153,42 @@ let appData = {
     }
 };
 
-appData.init();
+// appData.init();
+// Кнопка запуска
+let startButton = document.getElementById('start');
+console.log('startButton: ', startButton);
+let plusButtonIncome = document.querySelector('.income > button');
+console.log(plusButtonIncome);
+// Кнопка расходы
+let plusButtonExpenses = document.querySelector('.expenses > button');
+console.log(plusButtonExpenses);
+// Чекбокс депозит
+let checkBoxDeposit = document.querySelectorAll('#deposit-check');
+console.log(checkBoxDeposit);
+// Поля возможные доходы
+let itemsIncomeAdditional = document.querySelectorAll('.additional_income-item');
+console.log(itemsIncomeAdditional);
+// Блок с результатами
+let result = document.querySelector('.result');
+console.log(result);
+// Все поля с значениями результатов
+let valuesResult = result.querySelectorAll('.result-total');
+console.log(valuesResult);
+// Поле месячный доход
+let salaryAmount = document.querySelector('.salary-amount');
+console.log(salaryAmount);
+// Поля дополнительные доходы
+let itemsExtraIncome = document.querySelector('.income-items');
+console.log(itemsExtraIncome);
+// Поля обязательные расходы
+let itemsExpenses = document.querySelector('.expenses-items');
+console.log(itemsExpenses);
+// Поле возможные расходы
+let itemsAdditionalExpenses = document.querySelector('.additional_expenses-item');
+console.log(itemsAdditionalExpenses);
+// Поле цель
+let target = document.querySelector('.target-amount');
+console.log(target);
+// Слайдер период
+let period = document.querySelector('.period-select');
+console.log(period);
