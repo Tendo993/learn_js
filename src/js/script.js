@@ -41,7 +41,7 @@ let appData = {
     expensesMonth: +0,
     start: function () {
         if (salaryAmount.value !== '') {
-            appData.budget = +salaryAmount.value;
+            this.budget = +salaryAmount.value;
             console.log(this.budget);
             this.getExpenses();
             this.getIncome();
