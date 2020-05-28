@@ -730,10 +730,131 @@ function lesson09(theme = 'Контекст вызова - this') {
   let foo = newTest.bind(obj); // Явная привязка
 
   // 4) Привязка new:
+  // Если объект создан через функцию-конструктор - то this будет указывать на созданный объект
 
 } // end lesson09
 
-function lesson10(theme = '') {
+function lesson10(theme = 'ООП. Наследование, прототипы, конструкторы и классы') {
+  // JavaScript - прототипно-ориентированый язык программирования
+  // Прототип - скрытая ссылка объекта
+  // Прототип - это объект из которого текущий объект черпает недостающие методы и свойства
+  let arr = [1, 2, 3, 4, 5];
+
+  console.log(arr);
+  // Все функции и свойства можно посмотреть при выводе объекта в консоль, весь список свойсв и методов будет в разделе __proto__.
+  console.log(arr.__proto__ === Array.prototype); // => true , прототип у созданного объекта arr и у объекта Array будет один.
+
+  let car = {
+    doors: 4,
+    turbocharging: false,
+    ride: function () {
+      console.log('Машина едет')
+    }
+  };
+
+  let newCar = Object.create(car); // Создание объекта newCar прототипом которого будет объект car
+  console.log(newCar); // В разделе __proto__ будут свойства из объекта car и его прототипа
+  newCar.model = 'mazda 3';
+  console.log(newCar.hasOwnProperty('model')); // => true , Метод проверяет есть ли указанное свойство у объекта, возвращает булеевое значение(true/false), этот метод не видит свойства прототипа.
+  console.log(newCar.__proto__.hasOwnProperty('model')); // => false , проверка наличия свойства у прототипа
+
+  console.log(car.isPrototypeOf(newCar)); // => true , метод проверяет является объект car прототипом для newCar.
+
+  // Конструкторы
+  // Функция-конструктор - это функция которая имеет локальные переменные которая используется для описания какой-то сущности.
+  // Функции-конструкторы принято называть с большой буквы
+  function Car() {
+    this.model = 'Mazda';
+  };
+
+  let car1 = new Car(); // this будет указывать на car1;
+  console.log(car1); // При выводе в консоле у объекта будет пометка 'Car' подсказывающая, что этот объект был создан через функцию-конструктор. Если открыть описание объект car1, в разделе __proto__ будет пометка 'constructor: Car()'.
+
+  Car.prototype.ride = function () {
+    console.log('Ехать');
+  }; // Добавить новый метод ride в прототип конструктора Car. У созданного при помощи коструктора Car объекта в прототипах будет доступен метод ride.
+
+  car1.ride(); // => 'Ехать', вызов метода прототипа
+
+  function Car(model, color) {
+    this.model = model;
+    this.color = color;
+  };
+  Car.prototype.ride = function () {
+    console.log('Ехать');
+  };
+  let car1 = new Car('Mazda', 'Red');
+  car1.ride();
+  console.log(car1); // => model: 'Mazda', color: 'Red';
+
+  // Добавление метода в прототип функции-конструктора делается для экономии памяти, чтобы не создавать метод в кажном новом объекте метод создают единажды в прототипе объекта.
+
+  // Классы в JavaScript
+  // ООП - подход к решению задачи манипулируя объектами
+  // Класс - абстрактная единица описывающая объект
+  // В ООП любой объект должен быть создан на основании класса, должен существовать класс который декларирует создаваемый объект, описывает его структуру
+
+  function Car(brand, model, options) {
+    this.brand = brand;
+    this.model = model;
+    options = options || {};
+    this.color = options.color;
+    this.transmission = options.transmission;
+  }; // Создание класса, который задает структуру но не создает объект.
+
+  Car.prototype.ride = function () {
+    console.log(this.brand + ' ' + this.model + ' поехала!');
+  }
+
+  let car1 = new Car('mazda', '3', {
+    color: 'blue'
+  }); // Объект созданный на основе класса Car
+  let car2 = new Car('BMW', 'X3', {
+    ABS: true
+  }); // Свойство 'ABS: true' будет проигнорировано посколько оно не было задекларировано к функции-конструкторе.
+
+  car2.ride(); // => 'BMW X3 поехала!'
+  // Все объекты созданные на основании класса будут разными, а поведение у них будет общим
+
+  console.log(Car.prototype.isPrototypeOf(car1)); // Проверка вляется Car прототипом для car1
+  console.log(car2 instanceof Car); // То-же самое
+
+  // Наследование в JavaScript
+  function Car(countryBuild, options) {
+    this.countryBuild = countryBuild;
+    options = options || {};
+    this.color = options.color;
+    this.transmission = options.transmission;
+  };
+
+  Car.prototype.ride = function () {
+    console.log(this.brand + ' ' + this.model + ' поехала!');
+  };
+
+  function Audi(countryBuild, options, model, type) {
+    this.brand = 'Audi';
+    Car.apply(this, arguments); // Наследование
+    this.model = model;
+    this.type = type;
+  }; // Данный класс имеет те-же параметры, что и класс Car, а также свои параметры
+
+  Audi.prototype = Object.create(Car.prototype); // Добавить содержимое прототипа Car прототипу Audi
+  Audi.prototype.constructor = Audi; // установить Audi коструктором для Audi
+
+  // Наследование - это отношения между классами при котором класс использует структуру или поведение другого класса(одиночное наследование), или других классов(множественное наследование)
+
+  let car_q7 = new Audi('germany', {
+    color: 'red'
+  }, 'Q7', 'S');
+
+  console.log(car_q7);
+  console.log(car_q7 instanceof Audi); // => true
+  console.log(car_q7 instanceof Car); // => true
+
+  car_q7.ride(); // => 'Audi Q7 поехала'
+
+
+
 
 } // end lesson10
 
