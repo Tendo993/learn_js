@@ -858,7 +858,369 @@ function lesson10(theme = 'ООП. Наследование, прототипы,
 
 } // end lesson10
 
-function lesson11(theme = '') {
+function lesson11(theme = 'Особенности современного стандарта ES6, интерполяция, деструктуризация, новый синтаксис') {
+  // Проблемы возникающие при использовании var для объявления переменной:
+  // Всплытие переменной - это когда переменная созданая в середине кода видна в начале. При всплытии интерпретатор "знает" о существовании переменной, но значение ей присваивается только в том месте, где она была объявлена. При обращении к всплывшей переменной(но не определенной) её значение будет "undefined" вместо "is not defined".
+  // Переменную можно переопределить(присвоить ей значение) до её объявления.
+  // Переменную через var можно объявлять много раз и это не вызовет ошибки.
+  // Область видимости.
+
+  // При использовании let в условии цикла for для каждой итерации цикла переменная let будет своя и будет хранить значение каждый раз в другой ячейке памяти
+
+  // const - объявление константы
+  // Значение переменной объявленой констанотой менять нельзя
+  // Если объявить массив или объект константой - то присвоить этому массиву/объекту новый массив/объект будет нельно, но работать с их элементами/свойствами будет можно(добавлять, изменять, удалять).
+  const array = [1, 2, 3];
+  array.push(4);
+  array[0] = 7;
+  console.log(array); // => [7, 2, 3, 4]
+
+  // В современной практике хорошим тоном является использовать const везде, где можно обойтись без let.
+  // const можно использовать при получении элементов со страницы, создании функций, объявление переменной.
+
+  // Шаблонные строки:
+  const str = "Двойные ковычки";
+  const str2 = 'Одинарные кавычки';
+  const str3 = `Обратные кавычки`;
+  // Обратные кавычки водят строку в том виде, в котором она написана, с переносами.
+  // Обратные кавычки позволяют вставлять значение переменной в строку
+  const name = 'Alex';
+  const age = 18;
+  const newStr = `This is ${name}, his age ${age + 1}`;
+  console.log(newStr); // => "This is Alex, his age 19"
+
+  // Указание параметров функции по умолчанию
+  const createHome = function (wall = 4, doors = 1, window = 2) {
+    console.log(`Дом имеет:
+    Стены: ${wall},
+    Двери: ${doors},
+    Окна: ${window}.`)
+  }; // "wall = 4, doors = 1, window = 2" - параметры по умолчанию, если передать значения для этих параметров - параметры по умолчанию будут заменены на новые.
+  createHome(6, 2, 3); // => "Дом имеет: Стены: 6, Двери: 2, Окна: 3."
+  // Обычно параметры у которых указывается значение по умолчанию указываются последними, поскольку при вызове функции нельзя указать пустое значение вместо значения аргумента. Но вместо пустого значения можно указать undefined и тогда будет использовано значение по умолчанию.
+
+  // Стрелочные функции:
+  const sum = (a, b) => {
+    return a + b;
+  };
+  console.log(sum(2, 3)); // => '5'
+
+  // Одной из особеностей стрелочных функций - если тело функции состоит из одной строки которая возвращаят какое-то значение тогда фигурные скобки и оператор return можно пропустить:
+  const sum1 = (a, b) => a + b;
+  console.log(sum1(2, 3)); // => '5'
+
+  // Если функция возвращает объект, нужно возвращаемый объект завернуть в круглые скобки, чтобы избежать синтаксической ошибки:
+  const sum2 = (a, b) => ({
+    a: a,
+    b: b,
+    sum: a + b
+  });
+  console.log(sum2(3, 5)); // => { a: 3, b: 5, sum: 8 }
+
+  // Если у функции только 1 параметр - то можно не писать круглые скобки:
+  const sum3 = a => a + a;
+  console.log(sum3(3)); // => '6'
+
+  // Использование стрелочной фукции в обработчике события:
+  const img = document.querySelector('.img');
+  img.addEventListener('click', () => {
+    console.log('click');
+  });
+
+  // Добавление обработчиков событий нескольким картинкам:
+  const images = document.querySelectorAll('.img');
+  images.addEventListener('click', (e) => {
+    console.log(e); // Вывести в консоль элементы
+  });
+
+  // У стрелочных функций нет контекста вызова и свойства prototype из-за чего их нельзя использовать в каяестве конструктора. Контекст вызова стрелочной функции переходит к фунц=кции-родителю в котором находится стрелочная функция
+  // Стрелочные функции рекомендуется использовать везде где не требуется контекст вызова
+
+
+
+  // rest-параметр
+
+  // ... - rest-параметр
+  // рест-параметр позволяет все аргументы передаваемые при вызове функции записать в массив
+
+  function test(a, b, c, ...arr) {
+    console.log(a, b, c);
+    console.log(arr); // arr - имя переменной в которую рест-параметр записывет массив аргументов
+  };
+  test('red', 5, 12, 'black', [], true, 9); // => 'red 5 12' и '[ 'black', [], true, 9 ]'
+
+  // рест-параметр всегда идет последним поскольку все аргументы которые не "пометились" в параметры указанные перед рест-параметром будут переданны в массив созданный рест-параметром и параметрам указанным после рест-параметро переданно ничего не будет.
+
+
+
+  // спред-оператор
+
+  // спред-оператор передает элементы массива в параметры функции
+
+  const arr = ['red', 5, 12];
+  const arr2 = ['black', true];
+
+  function test(a, b, c, d, f, e) {
+    console.log(a, b, c);
+    console.log(d, f, e);
+  };
+
+  test(...arr, 50, ...arr2); // => 'red 5 12' и '50 'black' true' , ...arr и ...arr2 - в данном случае являются спред-операторомами. при вызове функции аргументами можно передавать несколько спред-операторов перечисленных через запятую.
+
+  // Спред-оператор удобно использовать при создании массива состоящего из нескольких массивов
+
+  const arr = ['red', 5, 12];
+  const arr2 = ['black', true];
+  const arr3 = [50, ...arr, null, ...arr2];
+  console.log(arr3); // => [ 50, 'red', 5, 12, null, 'black', true ]
+
+  // Преобразование коллекции элементов в массив:
+  const allImg = document.querySelectorAll('img');
+  const newImg = [...allImg];
+
+
+
+  // Деструктуризация объектов:
+  const car = {
+    brand: 'Mazda',
+    model: 3,
+    color: 'red'
+  };
+
+  // Как это делалось раньше:
+  // const brand = car.brand;
+  // const model = car.model;
+  // const color = car.color;
+
+  // Как это делать при помощи деструктуризации - {} :
+
+  const {
+    brand,
+    model,
+    color
+  } = car; // В фигурных скобках указаны имена переменных
+
+  console.log(brand, model, color);
+
+  // Использование деструктуризации с вложенными объектами:
+  const car = {
+    brand: 'Mazda',
+    model: 3,
+    options: {
+      color: 'red',
+      abs: true
+    }
+  };
+  const {
+    brand,
+    model,
+    options: {
+      color,
+      abs
+    }
+  } = car;
+  console.log(brand, model, color, abs); // => 'Mazda 3 red true'
+
+  // Изменение имени получаемой переменной при деструктуризации
+
+  const car = {
+    brand: 'Mazda',
+    model: 3,
+    color: 'red'
+  };
+  const {
+    brand: carBrand
+  } = car;
+  console.log(carBrand); // => 'Mazda'
+
+  // Можно указать значение по умолчанию, которое будет присвоено переменной если данного свойства у объекта нет:
+
+  const car = {
+    brand: 'Mazda',
+    color: 'red'
+  };
+  const {
+    brand,
+    model = 6,
+    color
+  } = car;
+  console.log(brand, model, color); // => 'Mazda 6 red'
+
+  // Установить значение по умолчанию для вложенного объекта
+  const car = {
+    brand: 'Mazda',
+    model: 3
+  };
+  // Чтобы установить значение по умолчанию у свойства не существующего объекта нужно создать пустой объект
+  const {
+    options: {
+      color = 'black'
+    } = {}
+  } = car;
+  console.log(color); // => 'black'
+
+  // Использование деструктуризации на примере функции которой в качестве параметра передается объект
+
+  const createCar = ({
+    brand = 'bmw',
+    model = '6',
+    color = 'black',
+    colorInt = 'white'
+  } = {} /* Чтобы не было ошибки при вызове без аргументов устанавливается пустой объект */ ) => {
+    console.log(`Начато прозиводство машины:
+    марка: ${brand}
+    Модель: ${model}
+    Цвет: ${color}
+    Цвет интерьера: ${colorInt}`)
+  };
+  createCar({
+    color: 'red'
+  }); // => 'Начато прозиводство машины: марка: bmw Модель: 6 Цвет: red Цвет интерьера: white'
+
+  // Использование рест-параметра при деструктуризации:
+
+  const car = {
+    brand: 'Mazda',
+    model: 3,
+    color: 'red',
+    abs: true
+  };
+  const {
+    brand,
+    ...other
+  } = car;
+
+  console.log(other); // => '{ model: 3, color: 'red', abs: true }'
+
+  // Деструктуризация массива:
+  const cars = ['mazda', 'bmw', 'audi', 'mercedes-benz', 'ЗИЛ'];
+  const [, a, , b, c] = cars;
+  console.log(a, b, c); // => 'bmw mercedes-benz ЗИЛ'
+  // Деструктуризация вложенного массива:
+  const cars = [
+    ['mazda', 'bmw'],
+    ['audi', 'mercedes-benz'], 'ЗИЛ'
+  ];
+  const [
+    [a, b],
+    [c, d], e
+  ] = cars;
+  console.log(a, b, c, d, e); // => 'mazda bmw audi mercedes-benz ЗИЛ'
+
+  // Установить значение по умолчанию:
+  const cars = [
+    ['mazda', 'bmw'],
+    ['audi', 'mercedes-benz']
+  ];
+  const [
+    [a, b],
+    [c, d], e = 'opel'
+  ] = cars;
+  console.log(a, b, c, d, e); // => 'mazda bmw audi mercedes-benz opel'
+
+  // Деструктуризация массива в объекте:
+
+  const carsModel = {
+    brand: 'Volvo',
+    models: {
+      sedan: ['s60', 's90'],
+      cross: ['v60', 'v90']
+    }
+  };
+  const {
+    models: {
+      sedan: [s1, s2],
+      cross: [v1, v2]
+    }
+  } = carsModel;
+  console.log(s1, s2); // => 's60 s90'
+  console.log(v1, v2); // => 'v60 v90'
+
+  // Новый синтаксис добавления свойств в объект:
+  const car = 'bentley';
+  const cycle = 'bmx';
+  const bike = 'honda';
+  // Старый синтаксис
+  const transport = {
+    car: car,
+    cycle: cycle,
+    bike: bike
+  };
+  console.log(transport); // => { car: 'bentley', cycle: 'bmx', bike: 'honda' }
+  // Новый синтаксис:
+  const transport = {
+    car,
+    cycle,
+    bike
+  };
+  console.log(transport); // => { car: 'bentley', cycle: 'bmx', bike: 'honda' }
+
+  // Новый способ объявлять метод объекта:
+  const transport = {
+    car: 'bentrley',
+    cycle: 'bmx',
+    bike: 'honda',
+    ride() {
+      console.log('Ride!');
+      console.log(this); // => car{} , Метод ride не является стрелочной функцией.
+    },
+    show: () => {
+      console.log('Пример стрелочной функции.');
+      console.log(this); // => window
+    }
+  };
+  transport.ride(); // => 'Ride!'
+  transport.show();
+
+  // Новый метод глобального объекта Object - assign. Позволяет скопировать и заменить уже существующие данные из одного объекта в другой:
+  const transport = {
+    bike: 'honda',
+    cycle: 'bmx',
+    car: 'bentley'
+  };
+  const newTransport = {
+    bike: 'suzuki',
+    quadroBike: 'polaris'
+  };
+  Object.assign(transport, newTransport); // 1) Объект в который скопируют данные, 2) объект из которого скопируют данные.
+  // Свойства будут перезаписаны самыми актуальными слева-на-право.
+  console.log(transport); // => { bike: 'suzuki', cycle: 'bmx', car: 'bentley', quadroBike: 'polaris' }
+  console.log(newTransport); // => { bike: 'suzuki', quadroBike: 'polaris' }
+
+  // Создать копию объекта:
+  const currentTransport = Object.assign({}, transport); // Скопировать данные в пусмтой объект и присвоить его в переменную currentTransport
+  console.log(currentTransport); // => { bike: 'suzuki', cycle: 'bmx', car: 'bentley', quadroBike: 'polaris' }
+
+
+  // Object.spred-оператор
+  const transport = {
+    bike: 'honda',
+    cycle: 'bmx',
+    car: 'bentley'
+  };
+  const newTransport = {
+    bike: 'suzuki',
+    quadroBike: 'polaris'
+  };
+  const ship = 'photinia';
+  const curTransport = {
+    ...transport,
+    ...newTransport,
+    ship,
+    ride() {
+      console.log('Go!')
+    }
+  };
+  console.log(curTransport); // => { bike: 'suzuki', cycle: 'bmx', car: 'bentley', quadroBike: 'polaris', ship: 'photinia' }
+  curTransport.ride(); // => 'Go!'
+
+
+
+
+
+
+
+
 
 } // end lesson11
 
